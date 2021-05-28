@@ -1,0 +1,13 @@
+html
+	head
+		title Admin Login
+		style
+			include style.css
+body
+	p Admin Login
+	form(action = "/admin_login" method = "POST")
+		input(name = "id" type = "text" required placeholder = "Admin ID")
+		input(name = "password" type = "password" required placeholder = "Password")
+		button(type = "Submit") Log in
+	if(message)
+		h4 #{message}

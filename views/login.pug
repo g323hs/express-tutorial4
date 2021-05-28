@@ -1,0 +1,15 @@
+html
+	head
+		title Login
+		style
+			include style.css
+body
+	p Login
+	form(action = "/login" method = "POST")
+		input(name = "id" type = "text" required placeholder = "User ID")
+		input(name = "password" type = "password" required placeholder = "Password")
+		button(type = "Submit") Log in
+	if(message)
+		h4 #{message}
+	if(invalid)
+		a(href='/signup') Signup

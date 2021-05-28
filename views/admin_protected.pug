@@ -1,0 +1,87 @@
+
+
+html
+	head
+		title Admin protected
+		style
+			include style.css
+body
+	p Admin protected
+
+	script.
+		async function getData(){
+			const options = {method: 'POST', headers: {'Content-Type': 'application/json'}};
+			const response = await fetch('/get_data', options);
+			var data = await response.json();
+			//console.log(data);
+
+			if (data.length > 0) {
+				var col = [];
+				for (var i = 0; i < data.length; i++) {
+					for (var key in data[i]) {
+						if (col.indexOf(key) === -1) {
+							col.push(key);
+						}
+					}
+				}
+				var table = document.createElement("table");
+
+				var tr = table.insertRow(-1);
+
+				for (var i = 0; i < col.length; i++) {
+					var th = document.createElement("th");
+					th.innerHTML = col[i];
+					tr.appendChild(th);
+				}
+
+				for (var i = 0; i < data.length; i++) {
+
+					tr = table.insertRow(-1);
+
+					for (var j = 0; j < col.length; j++) {
+						var tabCell = tr.insertCell(-1);
+						tabCell.innerHTML = data[i][col[j]];
+					}
+				}
+
+				var divContainer = document.getElementById("showData");
+				divContainer.innerHTML = "";
+				divContainer.appendChild(table);
+			} else {
+				var divContainer = document.getElementById("showData");
+				divContainer.innerHTML = "No Users";
+			}
+		}
+		getData();
+
+	button(type = "button" value = "Refresh Users" onclick = "getData()") Refresh Users
+	p(id = "showData")
+
+
+	p Enter User ID and submit to remove user
+	form(action = "/admin_protected/remove" method = "POST")
+		input(name = "id" type = "text" required placeholder = "User ID")
+		button(type = "Submit") Remove User
+
+	if (remove_message)
+		p #{remove_message}
+
+
+	p Enter User ID and Password to add user
+		form(action = "/admin_protected/add" method = "POST")
+			input(name = "id" type = "text" required placeholder = "User ID")
+			input(name = "password" type = "password" required placeholder = "Password")
+			button(type = "Submit") Add User
+
+	if (add_message)
+			p #{add_message}
+
+	p Website Links
+	- const links = ['signup', 'login', 'logout', 'protected_page', 'failed_attempt', 'admin_protected', 'admin_login', 'admin_logout', 'admin_failed']
+
+	ul
+		each link in links
+			li
+				a(href=`/${link}`)= link
+
+	a(href="/admin_logout") Logout
